@@ -4,16 +4,16 @@
 class DB
 {
     public static $DBHOST = 'localhost';
-    public static $DBNAME = 'fibonacci';
-    public static $DBUSER = 'root' ;
+    public static $DBNAME = 'admin_new';
+    public static $DBUSER = 'John' ;
     public static $DBPASS = '';
 
     public static function getConnection()
     {
 
         try {
-            return new PDO("mysql:host=". self::$DBHOST .";dbname=".
-                self::$DBNAME.';charset=utf8', self::$DBUSER, self::$DBPASS);
+            return new PDO('mysql: host=localhost;dbname=admin_new;port=33061','root','');
+               // self::$DBNAME.';charset=utf8','port=33061', self::$DBUSER, self::$DBPASS);
 
         }
         catch(PDOException $e)
