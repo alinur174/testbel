@@ -1,6 +1,5 @@
 <?php
 
-
 ?>
 
 <!doctype html>
@@ -16,10 +15,29 @@
 
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Create
-</button>
+<div class="d-flex justify-content-center my-5">
+    <button type="button" class="btn btn-primary" data-toggle="modal" style="width: 200px;height: 38px"
+            data-target="#exampleModal">
+        Create
+    </button>
+    <form class="form-inline" action="site/search" method="post">
+        <div class="form-group mx-sm-3 mb-2">
+            <label for="inputPassword2" class="sr-only">search</label>
+            <input type="text" class="form-control" id="input_search" placeholder="Name">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+    </form>
+</div>
 
+<?php
+if ($_SESSION['error']):
+    ?>
+    <div class="container">
+        <div class="mb-4">
+            <span>such number already exists</span>
+        </div>
+    </div>
+<?php endif; ?>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -31,55 +49,53 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="create" method="post">
-                    <input type="text" name="number">
-                    <input type="text" name="prefix">
-                    <input type="text" name="name">
-                    <select name="select"> <!--Supplement an id here instead of using 'name'-->
-                        <option value="value1">Значение 1</option>
-                        <option value="value2" selected>Значение 2</option>
-                        <option value="value3">Значение 3</option>
+                <form action="create" method="post" id="create">
+                    <input type="text" placeholder="number" class="number" name="number">
+                    <input type="text" name="name" placeholder="name">
+                    <select name="prefix"> <!--Supplement an id here instead of using 'name'-->
+                        <?php foreach ($this->prefixList as $value): ?>
+                            <option value="<?php echo $value ?>">+ <?php echo $value ?></option>
+                        <?php endforeach; ?>
                     </select>
-                    <button type="submit">send</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+
         </div>
     </div>
 </div>
 
-
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Number</th>
-        <th scope="col">Country</th>
-        <th scope="col">Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($phones as $phone): ?>
+<div class="container">
+    <table class="table">
+        <thead>
         <tr>
-            <th scope="row">1</th>
-            <td><?php echo $phone['number'] ?></td>
-            <td><?php echo $phone['name'] ?></td>
-            <input type="hidden" name="id" id="<?php echo $phone['id'] ?>" value="<?php echo $phone['id'] ?>">
-            <td><a href="site/delete/<?php echo $phone['id'] ?>">Delete</a>
-                <button type="button" class="btn btn-primary updateModal" data-toggle="modal" value="<?php echo $phone['id'] ?>"  data-target="#updateModal">
-                    Update
-                </button>
-            </td>
+            <th scope="col">Number</th>
+            <th scope="col">Name</th>
+            <th scope="col">Prefix</th>
         </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
-
-
-
+        </thead>
+        <tbody>
+        <?php for ($i = 0, $size = count($phones); $i < $size; $i++): ?>
+            <?php ?>
+            <tr>
+                <td><?php echo $phones[$i]['number'] ?></td>
+                <td><?php echo $phones[$i]['name'] ?></td>
+                <td><?php echo $phones[$i]['prefix'] ?></td>
+                <input type="hidden" name="id" id="<?php echo $phone['id'] ?>" value="<?php echo $phone['id'] ?>">
+                <td><a class="btn btn-dark" href="site/delete/<?php echo $phones[$i]['id'] ?>">Delete</a>
+                    <button type="button" class="btn btn-primary updateModal" data-toggle="modal"
+                            value="<?php echo $phones[$i]['id'] ?>" data-target="#updateModal">
+                        Update
+                    </button>
+                </td>
+            </tr>
+        <?php endfor; ?>
+        </tbody>
+    </table>
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -92,44 +108,32 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="site/update/" method="post" class="update_form">
-                    <input type="text" name="number">
-                    <input type="text" name="id">
-                    <input type="text" name="prefix">
-                    <input type="text" name="name">
-                    <select name="select"> <!--Supplement an id here instead of using 'name'-->
-                        <option value="value1">Значение 1</option>
-                        <option value="value2" selected>Значение 2</option>
-                        <option value="value3">Значение 3</option>
+                <form action="site/update/" method="post" id="update" class="update_form">
+                    <input type="text" placeholder="number" name="number">
+                    <input type="text" name="name" placeholder="name">
+                    <select name="prefix" class="select_prefix"> <!--Supplement an id here instead of using 'name'-->
+                        <?php foreach ($this->prefixList as $value): ?>
+                            <option value="<?php echo $value ?>">+ <?php echo $value ?></option>
+                        <?php endforeach; ?>
                     </select>
-                    <button type="submit">send</button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+
         </div>
     </div>
 </div>
 
-<form class="form-inline">
-    <div class="form-group mb-2">
-        <label for="staticEmail2" class="sr-only">Email</label>
-        <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="email@example.com">
-    </div>
-    <div class="form-group mx-sm-3 mb-2">
-        <label for="inputPassword2" class="sr-only">search</label>
-        <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
-    </div>
-    <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
-</form>
-
+<div id="test"></div>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
       integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+<script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
@@ -137,16 +141,82 @@
 
 <script>
 
-    // $('#ok').on('click', function (){
-    //     alert(2)
-    // })
+    $('#input_search').on('keyup', function () {
+        let tableClone = $('table tbody').clone()
+        let name = $('#input_search').val()
+        $.ajax({
+            url: 'site/search',
+            type: 'POST',
+            data: {'name': name}
+        }).done(function (d) {
+            if (!isEmpty(d)) {
+                let data = JSON.parse(d)
+                console.log(data)
+                $('table tbody').html(`<td>${data[0].number}</td><td>${data[0].name}</td><td>${data[0].prefix}</td>`)
+            }else{
+                console.log(2)
+                console.log(tableClone.clone())
+                $('table tbody').replaceWith(tableClone.clone())
+            }
+        })
+    })
 
-$('.updateModal').on('click',function (){
-    let id = $(this).attr('value')
-    $('.update_form').attr('action', 'site/update/' + id)
-    console.log(id)
-})
+
+    $('.updateModal').on('click', function () {
+        let id = $(this).attr('value')
+        $('.update_form').attr('action', 'site/update/' + id)
+
+    })
+
+
+    $('form#update').on('submit', (e) => {
+        let name = $("form#update input[name='name']").val();
+        let number = $("form#update input[name='number']").val();
+        if (name == '' || number == '') {
+            e.preventDefault()
+            alert('fill in the fields')
+        }
+    })
+
+    $('form#create').on('submit', (e) => {
+        let name = $("form#create input[name='name']").val();
+        let number = $("form#create input[name='number']").val();
+        if (name == '' || number == '') {
+            e.preventDefault()
+            alert('fill in the fields')
+        }
+    })
+    function isEmpty(strIn)
+    {
+        if (strIn === undefined)
+        {
+            return true;
+        }
+        else if(strIn == null)
+        {
+            return true;
+        }
+        else if(strIn == "")
+        {
+            return true;
+        }else if(strIn == "[]")
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
 </script>
+<style>
+    .select_prefix {
+        width: 178px;
+    }
+
+
+</style>
 </body>
 </html>
 

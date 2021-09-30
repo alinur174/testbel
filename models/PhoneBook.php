@@ -98,5 +98,16 @@ class PhoneBook
         return false;
     }
 
+    public static function searchClient($name)
+    {
+        $db = DB::getConnection();
+        $sql = 'SELECT * FROM all_phone_book WHERE name = :name';
+        $result = $db->prepare($sql);
+        $result->bindParam(':name', $name, PDO::PARAM_STR);
+        $result->execute();
+        return $result->fetchAll(PDO::FETCH_ASSOC);
+
+    }
+
 
 }
