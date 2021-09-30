@@ -92,7 +92,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="site/update/<?php echo 3 ?>" method="post">
+                <form action="site/update/" method="post" class="update_form">
                     <input type="text" name="number">
                     <input type="text" name="id">
                     <input type="text" name="prefix">
@@ -112,7 +112,19 @@
         </div>
     </div>
 </div>
-<button class="tt" id="ok">ss</button>
+
+<form class="form-inline">
+    <div class="form-group mb-2">
+        <label for="staticEmail2" class="sr-only">Email</label>
+        <input type="text" readonly class="form-control-plaintext" id="staticEmail2" value="email@example.com">
+    </div>
+    <div class="form-group mx-sm-3 mb-2">
+        <label for="inputPassword2" class="sr-only">search</label>
+        <input type="password" class="form-control" id="inputPassword2" placeholder="Password">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+</form>
+
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
       integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
@@ -131,6 +143,7 @@
 
 $('.updateModal').on('click',function (){
     let id = $(this).attr('value')
+    $('.update_form').attr('action', 'site/update/' + id)
     console.log(id)
 })
 </script>

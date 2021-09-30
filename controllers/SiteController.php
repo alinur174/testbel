@@ -13,6 +13,7 @@ class SiteController
 
     public function actionIndex()
     {
+        $res = PhoneBook::checkUnique('23');
 
         $phones = PhoneBook::getPhones();
         require_once(ROOT . '/views/index.php');
@@ -43,6 +44,7 @@ class SiteController
         header('Location: /');
 
     }
+
 
     public function actionUpdateNumber($id)
     {
